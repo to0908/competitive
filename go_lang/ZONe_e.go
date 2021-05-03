@@ -50,6 +50,29 @@ func (g *WeightedGraph) add_undirected_edge(u, v, cost int){
 	g.v[u] = append(g.v[u],Edge{v,cost})
 	g.v[v] = append(g.v[v],Edge{u,cost})
 }
+// func (g *WeightedGraph) shortest_path(s int)[]int{
+// 	n := g.n
+// 	INF := 100000000000000000+7
+// 	dp := make([]int,n)
+// 	for i:=0;i<n;i++ {
+// 		dp[i] = INF
+// 	}
+// 	pq := new(Dijkstra)
+// 	heap.Push(pq,State{0,s})
+// 	for pq.Len() != 0 {
+// 		cur := heap.Pop(pq).(State)
+// 		if dp[cur.p] < cur.dist { continue }
+// 		for i:=0;i<len(g.v[cur.p]);i++{
+// 			nv := g.v[cur.p][i].to
+// 			ndist := cur.dist + g.v[cur.p][i].cost
+// 			if dp[nv] > ndist{
+// 				dp[nv] = ndist
+// 				heap.Push(pq,State{ndist,nv})
+// 			}
+// 		}
+// 	}
+// 	return dp
+// }
 func (g *WeightedGraph) shortest_path(s int)[]int{
 	n := g.n
 	INF := 100000000000000000+7
@@ -60,13 +83,13 @@ func (g *WeightedGraph) shortest_path(s int)[]int{
 	pq := new(Dijkstra)
 	heap.Push(pq,State{0,s})
 	for pq.Len() != 0 {
-		cur := heap.Pop(pq).(State)
-		if(dp[cur.p] < cur.dist){ continue }
-		for i:=0;i<len(g.v[cur.p]);i++{
-			nv := g.v[cur.p][i].to
-			ndist := cur.dist + g.v[cur.p][i].cost
+		S := pq.Pop().(State)
+		if dp[S.p] < S.dist { continue }
+		for i:=0;i<len(g.v[S.p]);i++{
+          nv := g.v[S.p][i].to
+          ndist := S.dist + g.v[S.p][i].cost
 			if dp[nv] > ndist{
-				dp[nv] = ndist
+              dp[nv]=ndist
 				heap.Push(pq,State{ndist,nv})
 			}
 		}
@@ -74,18 +97,22 @@ func (g *WeightedGraph) shortest_path(s int)[]int{
 	return dp
 }
 
+
+
 func main() {
-	buf := make([]byte, 1024*1024)
+buf := make([]byte, 1024*1024)
 	sc.Buffer(buf, bufio.MaxScanTokenSize)
 	sc.Split(bufio.ScanWords)
-
+ 
 	var h,w int
+	// fmt.Fscan(read,&h,&w)
 	h = readInt()
 	w = readInt()
 	g := NewWeightedGraph(h*w*2)
 	for i:=0;i<h;i++{
 		for j:=0;j<w-1;j++{
 			var a int
+			// fmt.Fscan(read,&a)
 			a = readInt()
 			g.add_directed_edge(i*w+j,i*w+j+1,a)
 			g.add_directed_edge(i*w+j+1,i*w+j,a)
@@ -97,10 +124,12 @@ func main() {
 			var a int
 			// fmt.Fscan(read,&a)
 			a = readInt()
-			g.add_directed_edge(i*w+j,i*w+w+j,a)
-			g.add_directed_edge(i*w+j+w,i*w+j+n,1)
-			g.add_directed_edge(i*w+j+w+n,i*w+j+n,1)
-			g.add_directed_edge(i*w+j+n,i*w+j,1)
+			g.add_directed_edge(i*w+j,i*w+w+j,a);
+ 
+            g.add_directed_edge(i*w+j+w,i*w+j+n,1);
+            g.add_directed_edge(i*w+j+w+n,i*w+j+n,1);
+ 
+            g.add_directed_edge(i*w+j+n,i*w+j,1);
 		}
 	}
 	fmt.Println(g.shortest_path(0)[n-1])
@@ -114,7 +143,6 @@ func readInt() int {
 	return i
 }
 // --------------------------------
-
 // chmax(&a,b)として使う
 func chmax(a *int, b int) bool {
 	if *a>=b{
