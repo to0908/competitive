@@ -58,7 +58,7 @@ func (g *WeightedGraph) shortest_path(s int)[]int{
 		dp[i] = INF
 	}
 	pq := new(Dijkstra)
-	heap.Push(pq,State{s,0})
+	heap.Push(pq,State{0,s})
 	for pq.Len() != 0 {
 		cur := heap.Pop(pq).(State)
 		if(dp[cur.p] < cur.dist){ continue }
