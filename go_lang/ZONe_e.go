@@ -62,8 +62,6 @@ func (g *WeightedGraph) shortest_path(s int)[]int{
 	for pq.Len() != 0 {
 		cur := heap.Pop(pq).(State)
 		if(dp[cur.p] < cur.dist){ continue }
-		// dp[p] = dist
-
 		for i:=0;i<len(g.v[cur.p]);i++{
 			nv := g.v[cur.p][i].to
 			ndist := cur.dist + g.v[cur.p][i].cost
