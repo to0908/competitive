@@ -97,12 +97,10 @@ func main() {
 			var a int
 			// fmt.Fscan(read,&a)
 			a = readInt()
-			g.add_directed_edge(i*w+j,i*w+w+j,a);
- 
-            g.add_directed_edge(i*w+j+w,i*w+j+n,1);
-            g.add_directed_edge(i*w+j+w+n,i*w+j+n,1);
- 
-            g.add_directed_edge(i*w+j+n,i*w+j,1);
+			g.add_directed_edge(i*w+j,i*w+w+j,a)
+			g.add_directed_edge(i*w+j+w,i*w+j+n,1)
+			g.add_directed_edge(i*w+j+w+n,i*w+j+n,1)
+			g.add_directed_edge(i*w+j+n,i*w+j,1)
 		}
 	}
 	fmt.Println(g.shortest_path(0)[n-1])
