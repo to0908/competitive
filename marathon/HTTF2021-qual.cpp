@@ -1,7 +1,6 @@
 #include<bits/stdc++.h> 
 using namespace std;
 typedef long long ll;
-#define endl '\n'
 #define all(x) (x).begin(),(x).end()
 template<typename T1,typename T2> bool chmin(T1 &a,T2 b){if(a<=b)return 0; a=b; return 1;}
 template<typename T1,typename T2> bool chmax(T1 &a,T2 b){if(a>=b)return 0; a=b; return 1;}
@@ -22,11 +21,16 @@ struct S{
 };
 
 /*
+解法
 5*5で1区画として、4*4区画に分割
  0   3  4  5
  1   2  7  6
 14  15  8  9
 13  12 11 10
+
+1区間の中のカード+次の区間への距離でbitDPを行い、区間内の回収+次の区間への移動を最適化
+→適当にカードを再配置+回収
+→時間いっぱい焼きなましで再配置+回収の最適化
 */
 
 const int range = 5;
@@ -89,7 +93,9 @@ vector<S> emp;
 stack<int> st_tmp;
 S start;
 vector<S> bestseq;
-int yaki_totori(){
+
+// 焼きなまし
+int yakinamashi(){
     Timer time;
     int end = 2975;
     int curscore = bestscore;
@@ -255,7 +261,7 @@ int solve(){
     st_tmp = st;
     start = now;
 
-    // 左下10*10マスに敷き詰める。ここがかなり無駄(回収でぐるぐるするので)
+    // 左下10*10マスに敷き詰める。ここがかなり無駄(回収でめっちゃぐるぐるするので)
     // greedy
     for(int i=19;i>=10;i--){
         for(int j=0;j<10;j++){
@@ -283,8 +289,7 @@ int solve(){
         }
     }
 
-    // ここ、賛否両論ポイント
-    // しない方が良い？ wakaran
+    // ここ、しない方が良い？ わからん
     //{
     //    for(int i=0;i<=10;i++)if(board[9][i] == false)emp.push_back({9,i});
     //    for(int i=10;i<=19;i++)if(board[i][10] == false)emp.push_back({i,10});
@@ -298,7 +303,7 @@ int solve(){
     }
     bestscore = cost;
     ans = ret;
-    if(chmin(cost,yaki_totori())){
+    if(chmin(cost,yakinamashi())){
         ans = base_str;
         now = start;
         st = st_tmp;
